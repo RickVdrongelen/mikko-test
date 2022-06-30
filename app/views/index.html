@@ -1,0 +1,16 @@
+<head>
+    <title>Payout Calculator</title>
+</head>
+<body>
+    <h1>Payout Calculator</h1>
+    <div>
+        <p>Please fill out the form below</p>
+        <form action="/calculate-payout" method="post">
+            <p>Calculate payout for year:</p>
+            <input type="text" name="year" value="" required/>
+            <input type="checkbox" name="payoutTypes[bonus]" value="true" checked="true"><span>Bonus</span>
+            <input type="checkbox" name="payoutTypes[salary]" value="true" checked="true"><span>Salary</span>
+            <input type="submit" />
+        </form>
+    </div>
+</body>

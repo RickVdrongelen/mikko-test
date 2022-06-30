@@ -1,0 +1,15 @@
+<head>
+    <title>Payout</title>
+</head>
+<body>
+    <h1>See your payout results here:</h1>
+    <table>
+        <tr>
+            <th>Month</th><th>Bonus date</th><th>Bonus day</th><th>Salary date</th><th>Salary day</th>
+        </tr>    
+    {% for result in payoutResults %}
+        <tr><td>{{ result.month }}</td><td>{{ result.bonusDate }}</td><td>{{result.bonusDay}}</td><td>{{ result.salaryDate }}</td><td>{{result.salaryDay}}</td></tr>    
+    {% endfor %}
+    </table>
+    <a href="{{ download }}">Download CSV output</a>
+</body>

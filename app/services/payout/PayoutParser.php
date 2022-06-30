@@ -1,5 +1,9 @@
 <?php
-require_once('PayoutParserResult.php');
+namespace App\Services\Payout;
+
+use DateInterval;
+use DateTime;
+use DateTimeImmutable;
 
 class PayoutParser {
     private DateTime $currentDateTime;
@@ -10,6 +14,8 @@ class PayoutParser {
     
     public function __construct(
         private ?DateTime $startDateTime = null, 
+        private bool $bonus = true,
+        private bool $salary = true
     ) {
         $current = new DateTime();
         
@@ -33,18 +39,24 @@ class PayoutParser {
             $this->currentDateTime = $this->currentDateTime->setDate($this->currentDateTime->format("Y"), $this->currentDateTime->format("m")+1, 1);
         }
 
+        $salaryPayoutDate = $this->getSalaryPayoutDate();
     
-        $this->bonusPayoutDate = $this->getBonusPayoutDate();
-        $this->salaryPayoutDate = $this->getSalaryPayoutDate();
+        if($this->bonus) {
+            $this->bonusPayoutDate = $this->getBonusPayoutDate();
+        }
 
-        $this->currentDateTime = DateTime::createFromImmutable($this->salaryPayoutDate);
+        if($this->salary) {
+            $this->salaryPayoutDate = $salaryPayoutDate;
+        }
+
+        $this->currentDateTime = DateTime::createFromImmutable($salaryPayoutDate);
         $this->firstRun = false;
 
         return $this;
     }
 
     public function getOutput() : PayoutParserResult {
-        return new PayoutParserResult($this->currentDateTime, $this->bonusPayoutDate, $this->salaryPayoutDate);
+        return new PayoutParserResult($this->currentDateTime, $this->bonus ? $this->bonusPayoutDate : null, $this->salary ? $this->salaryPayoutDate : null);
     }
 
     private function getBonusPayoutDate() : DateTimeImmutable {
